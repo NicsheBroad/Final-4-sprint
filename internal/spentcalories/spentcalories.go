@@ -70,7 +70,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 			log.Println(err)
 			return "", err
 		}
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", activity, duration, dist, speed, calories)
+		message := fmt.Sprintf("\nТип тренировки: %s\nДлительность: %.2v ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %f", activity, duration.Hours(), dist, speed, calories)
 
 		return message, nil
 	case "Бег":
@@ -79,7 +79,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 			log.Println(err)
 			return "", err
 		}
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", activity, duration, dist, speed, calories)
+		message := fmt.Sprintf("\nТип тренировки: %s\nДлительность: %.2v ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %f", activity, duration.Hours(), dist, speed, calories)
 
 		return message, nil
 	default:
@@ -121,8 +121,9 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 	if height <= 0 {
 		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", height)
 	}
-
-	result := (duration.Minutes() * meanSpeed(steps, height, duration) * weight) / 60 / walkingCaloriesCoefficient
+	speed := meanSpeed(steps, height, duration)
+	minutes := duration.Minutes()
+	result := (weight * speed * minutes) / 60 * walkingCaloriesCoefficient
 
 	return result, nil
 }
