@@ -33,9 +33,12 @@ func parsePackage(data string) (int, time.Duration, error) {
 		return 0, 0, fmt.Errorf("invalid data, expected a positive number, got %d", steps)
 	}
 
-	fullTime, err := time.ParseDuration(slices[1])
+	fullTime, err := time.ParseDuration(strings.TrimSpace(slices[1]))
 	if err != nil {
 		return 0, 0, fmt.Errorf("invalid data, expected a duration, got %s", slices[1])
+	}
+	if fullTime <= 0 {
+		return 0, 0, fmt.Errorf("invalid data, expected a positive duration, got %v", fullTime)
 	}
 
 	return steps, fullTime, nil

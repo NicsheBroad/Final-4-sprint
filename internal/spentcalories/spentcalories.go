@@ -11,7 +11,7 @@ import (
 
 // Основные константы, необходимые для расчетов.
 const (
-	//lenStep                    = 0.65 // средняя длина шага.
+	lenStep                    = 0.65 // средняя длина шага.
 	mInKm                      = 1000 // количество метров в километре.
 	minInH                     = 60   // количество минут в часе.
 	stepLengthCoefficient      = 0.45 // коэффициент для расчета длины шага на основе роста.
@@ -29,6 +29,9 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	if err != nil {
 		return 0, "", 0, fmt.Errorf("invalid steps value: %w", err)
 	}
+	if steps <= 0 {
+		return 0, "", 0, fmt.Errorf("invalid steps value: expected positive number, got %d", steps)
+	}
 
 	activity := strings.TrimSpace(slices[1])
 
@@ -36,14 +39,17 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	if err != nil {
 		return 0, "", 0, fmt.Errorf("invalid duration value: %w", err)
 	}
+	if duration <= 0 {
+		return 0, "", 0, fmt.Errorf("invalid duration value: expected positive duration, got %v", duration)
+	}
+
 	return steps, activity, duration, nil
 }
 
 func distance(steps int, height float64) float64 {
 	// TODO: реализовать функцию
-	stepLengthMeters := height * stepLengthCoefficient
-	distanceMeters := float64(steps) * stepLengthMeters
-	return distanceMeters / mInKm
+	return ((float64(steps) * (height * stepLengthCoefficient)) * lenStep) / mInKm
+
 }
 
 func meanSpeed(steps int, height float64, duration time.Duration) float64 {
@@ -117,10 +123,10 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", weight)
 	}
 	if duration <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive duration, got %d", duration)
+		return 0, fmt.Errorf("invalid data, expected a positive duration, got %v", duration)
 	}
 	if height <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive number, got %v", height)
+		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", height)
 	}
 	speed := meanSpeed(steps, height, duration)
 	minutes := duration.Minutes()
