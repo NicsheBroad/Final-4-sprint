@@ -21,11 +21,9 @@ const (
 func parseTraining(data string) (int, string, time.Duration, error) {
 	// TODO: реализовать функцию
 	slices := strings.Split(data, ",")
-	if slices[0] == "" {
-		return 0, slices[0], 0, nil
-	}
+
 	if len(slices) != 3 {
-		return 0, "", 0, errors.New("invalid parseTraining check job with slices")
+		return 0, "", 0, errors.New("slices incorrect")
 	}
 	steps, err := strconv.Atoi(slices[0])
 	if err != nil {
@@ -89,10 +87,10 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", steps)
 	}
 	if weight <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", weight)
+		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", weight)
 	}
 	if height <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", height)
+		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", height)
 	}
 	if duration <= 0 {
 		return 0, fmt.Errorf("invalid data, expected a positive duration, got %d", duration)
@@ -109,13 +107,13 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", steps)
 	}
 	if weight <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", weight)
+		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", weight)
 	}
 	if duration <= 0 {
 		return 0, fmt.Errorf("invalid data, expected a positive duration, got %d", duration)
 	}
 	if height <= 0 {
-		return 0, fmt.Errorf("invalid data, expected a positive number, got %d", height)
+		return 0, fmt.Errorf("invalid data, expected a positive number, got %f", height)
 	}
 
 	result := (duration.Minutes() * meanSpeed(steps, height, duration) * weight) / 60 / walkingCaloriesCoefficient

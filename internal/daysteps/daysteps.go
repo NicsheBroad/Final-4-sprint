@@ -18,24 +18,24 @@ const (
 
 func parsePackage(data string) (int, time.Duration, error) {
 	// TODO: реализовать функцию
-	slises := strings.Split(data, ",")
+	slices := strings.Split(data, ",")
 
-	if len(slises) != 2 {
-		return 0, 0, fmt.Errorf("invalid data, expected 2 items, got %d", len(slises))
+	if len(slices) != 2 {
+		return 0, 0, fmt.Errorf("invalid data, expected 2 items, got %d", len(slices))
 	}
 
-	steps, err := strconv.Atoi(slises[0])
+	steps, err := strconv.Atoi(slices[0])
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid data, expected a number, got %s", slises[0])
+		return 0, 0, fmt.Errorf("invalid data, expected a number, got %s", slices[0])
 	}
 
 	if steps <= 0 {
 		return 0, 0, fmt.Errorf("invalid data, expected a positive number, got %d", steps)
 	}
 
-	fullTime, err := time.ParseDuration(slises[1])
+	fullTime, err := time.ParseDuration(slices[1])
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid data, expected a duration, got %s", slises[1])
+		return 0, 0, fmt.Errorf("invalid data, expected a duration, got %s", slices[1])
 	}
 
 	return steps, fullTime, nil
@@ -57,7 +57,7 @@ func DayActionInfo(data string, weight, height float64) string {
 		return ""
 	}
 
-	result := fmt.Sprintf("Количество шаров: %d.\nДистанция составила %.2f.\nВы сожгли %.2f ккал.",
+	result := fmt.Sprintf("Количество шаров: %d.\nДистанция составила %.2f.\nВы сожгли %.2f ккал.\n",
 		steps, distance, calories)
 
 	return result
