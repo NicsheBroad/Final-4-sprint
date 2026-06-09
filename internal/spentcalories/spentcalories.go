@@ -23,17 +23,20 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	slices := strings.Split(data, ",")
 
 	if len(slices) != 3 {
-		return 0, "", 0, errors.New("slices incorrect")
+		return 0, "", 0, errors.New("invalid data format: expected 3 items")
 	}
-	steps, err := strconv.Atoi(slices[0])
+	steps, err := strconv.Atoi(strings.TrimSpace(slices[0]))
 	if err != nil {
-		return 0, "", 0, err
+		return 0, "", 0, fmt.Errorf("invalid steps value: %w", err)
 	}
-	duration, err := time.ParseDuration(slices[2])
+
+	activity := strings.TrimSpace(slices[1])
+
+	duration, err := time.ParseDuration(strings.TrimSpace(slices[2]))
 	if err != nil {
-		return 0, "", 0, err
+		return 0, "", 0, fmt.Errorf("invalid duration value: %w", err)
 	}
-	return steps, slices[1], duration, nil
+	return steps, activity, duration, nil
 }
 
 func distance(steps int, height float64) float64 {
