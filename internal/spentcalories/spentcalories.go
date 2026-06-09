@@ -20,19 +20,22 @@ const (
 
 func parseTraining(data string) (int, string, time.Duration, error) {
 	// TODO: реализовать функцию
-	slises := strings.Split(data, ",")
-	if len(slises) != 3 {
-		return 0, "", 0, errors.New("invalid parseTraining check job with slise")
+	slices := strings.Split(data, ",")
+	if slices[0] == "" {
+		return 0, slices[0], 0, nil
 	}
-	steps, err := strconv.Atoi(slises[0])
+	if len(slices) != 3 {
+		return 0, "", 0, errors.New("invalid parseTraining check job with slices")
+	}
+	steps, err := strconv.Atoi(slices[0])
 	if err != nil {
 		return 0, "", 0, err
 	}
-	duration, err := time.ParseDuration(slises[2])
+	duration, err := time.ParseDuration(slices[2])
 	if err != nil {
 		return 0, "", 0, err
 	}
-	return steps, slises[1], duration, nil
+	return steps, slices[1], duration, nil
 }
 
 func distance(steps int, height float64) float64 {
@@ -58,19 +61,19 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 
 	switch str {
 	case "Ходьба":
-		distance(steps, height)
-		meanSpeed(steps, height, duration)
+		dist := distance(steps, height)
+		speed := meanSpeed(steps, height, duration)
 		calories, err := WalkingSpentCalories(steps, weight, height, duration)
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %f.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, distance, meanSpeed, calories)
+		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, dist, speed, calories)
 		if err != nil {
 			return "", err
 		}
 		return message, nil
 	case "Бег":
-		distance(steps, height)
-		meanSpeed(steps, height, duration)
+		dist := distance(steps, height)
+		speed := meanSpeed(steps, height, duration)
 		calories, err := WalkingSpentCalories(steps, weight, height, duration)
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %f.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, distance, meanSpeed, calories)
+		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, dist, speed, calories)
 		if err != nil {
 			return "", err
 		}
