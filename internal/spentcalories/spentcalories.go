@@ -54,30 +54,33 @@ func meanSpeed(steps int, height float64, duration time.Duration) float64 {
 
 func TrainingInfo(data string, weight, height float64) (string, error) {
 	// TODO: реализовать функцию
-	steps, str, duration, err := parseTraining(data)
+	steps, activity, duration, err := parseTraining(data)
 	if err != nil {
 		log.Println(err)
 		return "", err
 	}
+	dist := distance(steps, height)
+	speed := meanSpeed(steps, height, duration)
+	var calories float64
 
-	switch str {
+	switch activity {
 	case "Ходьба":
-		dist := distance(steps, height)
-		speed := meanSpeed(steps, height, duration)
-		calories, err := WalkingSpentCalories(steps, weight, height, duration)
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, dist, speed, calories)
+		calories, err = WalkingSpentCalories(steps, weight, height, duration)
 		if err != nil {
+			log.Println(err)
 			return "", err
 		}
+		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", activity, duration, dist, speed, calories)
+
 		return message, nil
 	case "Бег":
-		dist := distance(steps, height)
-		speed := meanSpeed(steps, height, duration)
-		calories, err := WalkingSpentCalories(steps, weight, height, duration)
-		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", str, duration, dist, speed, calories)
+		calories, err = WalkingSpentCalories(steps, weight, height, duration)
 		if err != nil {
+			log.Println(err)
 			return "", err
 		}
+		message := fmt.Sprintf("\nТип тренировки: %s.\nДлительность: %v.\nДистанция: %f.\nСкорость: %f\nСожгли калорий: %f", activity, duration, dist, speed, calories)
+
 		return message, nil
 	default:
 		return "", errors.New("неизвестный тип тренировки")
