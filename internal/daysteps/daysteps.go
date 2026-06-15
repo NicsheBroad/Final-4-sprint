@@ -27,7 +27,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 
 	steps, err := strconv.Atoi(slices[0])
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid data, expected a number, got %s", slices[0])
+		return 0, 0, err
 	}
 
 	if steps <= 0 {
@@ -36,7 +36,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 
 	fullTime, err := time.ParseDuration(strings.TrimSpace(slices[1]))
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid data, expected a duration, got %s", slices[1])
+		return 0, 0, err
 	}
 	if fullTime <= 0 {
 		return 0, 0, fmt.Errorf("invalid data, expected a positive duration, got %v", fullTime)
